@@ -8,3 +8,9 @@ They worry about sources of bias when response rates are low. Could compare with
   
 
 Get a Qualtrix account - Princeton has an institutional license. Get an introductory account from which you can build a questionnaire. Designate Ahmed as collaborator so we can work together on it. Can do simulated tests - there is logic for presentation of questions. Google Forms has issues with IRB requirements path. First page will be like the standard consent form. Survey group provides a standard form. IRB will want consent form to be as simple and parsimonious as possible - tell people what they are going to be doing.
+
+
+## Creating conda environment
+conda create -n wib python=3
+conda activate wib
+conda install matplotlib numpy h5py seaborn scikit-learn
