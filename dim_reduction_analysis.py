@@ -267,7 +267,12 @@ def plot_clustermap():
 	column_names = ['Q' + str(i+2) for i in range(48)]
 	# should use jaccard or dice for categorical data??
 	# sns.clustermap(ynm_to_dig(df[column_names]),metric='jaccard')
-	sns.clustermap(ynm_to_dig(df[column_names]),metric='dice')
+	# sns.clustermap(ynm_to_dig(df[column_names]),metric='dice')
+
+	# need to set: colors by theme (subject, seniority, etc)
+	# also linkage method (single, ward, etc)
+	# sns.clustermap((ynm_to_dig(df[column_names])+1)/2,metric='jensenshannon')
+	sns.clustermap(ynm_to_dig(df[column_names]),method='ward',metric='euclidean')
 	plt.savefig('figs/clustermap.pdf')
 	# plt.show()
 
