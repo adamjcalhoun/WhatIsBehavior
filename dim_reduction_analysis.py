@@ -12,6 +12,9 @@ from scipy.cluster import hierarchy
 
 # import umap
 import seaborn as sns
+from matplotlib.colors import ListedColormap
+
+palette_YMN = sns.color_palette('rocket_r', 3)
 
 # USE MCA INSTEAD OF PCA
 # https://github.com/esafak/mca
@@ -357,7 +360,7 @@ def fig1():
 
 	df = pd.DataFrame(resp_list,columns=['Questions','Yes','Maybe','No'])
 	df = pd.melt(df,id_vars='Questions',var_name='answers',value_name='response')
-	ax = sns.barplot(ax=axes[0,0],x='Questions',y='response',hue='answers',data=df)
+	ax = sns.barplot(ax=axes[0,0],x='Questions',y='response',hue='answers',data=df,palette=palette_YMN)
 	sns.despine(ax=ax)
 	ax.set_xticklabels(ax.get_xticklabels(), rotation=0,horizontalalignment='center',size=6)
 	ax.set(ylim=(0, 1),title='most yes responses',xlabel=None)
@@ -372,7 +375,7 @@ def fig1():
 
 	df = pd.DataFrame(resp_list,columns=['Questions','Yes','Maybe','No'])
 	df = pd.melt(df,id_vars='Questions',var_name='answers',value_name='response')
-	ax = sns.barplot(ax=axes[0,1],x='Questions',y='response',hue='answers',data=df)
+	ax = sns.barplot(ax=axes[0,1],x='Questions',y='response',hue='answers',data=df,palette=palette_YMN)
 	sns.despine(ax=ax)
 	ax.set_xticklabels(ax.get_xticklabels(), rotation=0,horizontalalignment='center',size=6)
 	ax.set(ylim=(0, 1),title='most no responses',xlabel=None)
@@ -387,7 +390,7 @@ def fig1():
 
 	df = pd.DataFrame(resp_list,columns=['Questions','Yes','Maybe','No'])
 	df = pd.melt(df,id_vars='Questions',var_name='answers',value_name='response')
-	ax = sns.barplot(ax=axes[1,0],x='Questions',y='response',hue='answers',data=df)
+	ax = sns.barplot(ax=axes[1,0],x='Questions',y='response',hue='answers',data=df,palette=palette_YMN)
 	sns.despine(ax=ax)
 	ax.set_xticklabels(ax.get_xticklabels(), rotation=0,horizontalalignment='center',size=6)
 	ax.set(ylim=(0, 1),title='most maybe responses',xlabel=None)
@@ -403,16 +406,16 @@ def fig1():
 
 	df = pd.DataFrame(resp_list,columns=['Questions','Yes','Maybe','No'])
 	df = pd.melt(df,id_vars='Questions',var_name='answers',value_name='response')
-	ax = sns.barplot(ax=axes[1,1],x='Questions',y='response',hue='answers',data=df)
+	ax = sns.barplot(ax=axes[1,1],x='Questions',y='response',hue='answers',data=df,palette=palette_YMN)
 	sns.despine(ax=ax)
 	ax.set_xticklabels(ax.get_xticklabels(), horizontalalignment='center',size=6)
 	ax.set(ylim=(0, 1),title='most disagreement among responses',xlabel=None)
 	ax.text(panel_letter_x,panel_letter_y,'d',size=panel_font_size,weight='bold')
 
 	# now plot the questions and the resp
-	plt.tight_layout()
+	# plt.tight_layout()
 	plt.savefig('figs/fig1_responses.pdf')
-	# plt.show()
+	plt.show()
 
 	# labels (for full questions)
 	# https://www.drawingfromdata.com/how-to-rotate-axis-labels-in-seaborn-and-matplotlib
@@ -464,7 +467,7 @@ def fig2():
 	fig.subplots_adjust(hspace=.5,wspace=.3)
 
 	dim_1=0
-	dim_2=1
+	dim_2=2
 	panel_letter_x = -1.5
 	panel_letter_y = 1.05
 	panel_font_size = 15
@@ -513,19 +516,29 @@ def fig2():
 
 
 	# panel 1: by field
-	df = load_questionnaire(survey_file)
-	df = filter_questionnaire(df)
-
 	column_names = ['Q' + str(i+2) for i in range(48)]
-	question_dim = dim_reduction(df[column_names],'mca')
-	question_dim = np.array(question_dim)
-
+	# academic_fields = ['Neuroscience','Psychology']
+	# academic_fields = ['Sociology']
 	academic_fields = ['Neuroscience','Psychology','Biology','Philosophy','Sociology','Engineering','Medicine','History', 'Languages and Literature', 'Machine Learning', 'Mathematics', 'Statistics', 'Engineering', 'Ethology', 'Ecology']
 
+	df = df[df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin(academic_fields).any())]
+	# print(df)
+	question_dim, components_ = dim_reduction(df[column_names],'mca',with_components=True)
+	row_names = components_.index.values
+
+
+	palette_metadata = sns.color_palette('hls',len(academic_fields))
 	ax = axes[1,0]
-	for fld in academic_fields:
+	question_dim = np.array(question_dim)
+	for ii,fld in enumerate(academic_fields):
 		subj = np.array(df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin([fld]).any()))
-		axes[1,0].errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)))
+		# print(question_dim.shape)
+		# print(subj.shape)
+		# print(question_dim[subj,0])
+		# exit()
+		# axes[1,0].errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)),color=palette_metadata[ii])
+		axes[1,0].errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)),
+							fmt='o',color=palette_metadata[ii],markeredgecolor='k',ecolor='lightgray',elinewidth=2,capsize=0)
 
 	box = ax.get_position()
 	ax.set_position([box.x0, box.y0, box.width * 0.6, box.height])
@@ -539,11 +552,13 @@ def fig2():
 	ax = axes[1,1]
 	sub_fields = [['systems','circuit','circuits'],['cognitive','cognition'],['computational','theoretical','theory'],['molecular','cellular']]
 	sub_field_names = ['systems+circuits','cognitive','computational','molecular']
+	palette_metadata = sns.color_palette('hls',len(sub_fields))
 	df['Q57_6_TEXT'] = df['Q57_6_TEXT'].astype(str)
-	for fld in sub_fields:
+	for ii,fld in enumerate(sub_fields):
 		subj = np.array(df['Q57_6_TEXT'].apply(lambda x: pd.Series(re.split(',|/|and',x.lower().strip())).isin(fld).any()))
 		# print((np.mean(question_dim[subj,0]),np.mean(question_dim[subj,1]),np.std(question_dim[subj,0])/np.sqrt(np.sum(subj)),np.std(question_dim[subj,1])/np.sqrt(np.sum(subj))))
-		ax.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)))
+		ax.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)),
+					fmt='o',color=palette_metadata[ii],markeredgecolor='k',ecolor='lightgray',elinewidth=2,capsize=0)
 
 	box = ax.get_position()
 	ax.set_position([box.x0, box.y0, box.width * 0.6, box.height])
@@ -560,9 +575,11 @@ def fig2():
 	animals = ['rodents','fish','humans','drosophila','birds','in silico','c. elegans','other invertebrates','other mammals','other non-mammalian vertebrates','other non-animals']
 
 	ax = axes[2,0]
-	for fld in animals:
+	palette_metadata = sns.color_palette('hls',len(animals))
+	for ii,fld in enumerate(animals):
 		subj = np.array(df['Q58'].apply(lambda x: pd.Series(x.lower().split(',')).isin([fld]).any()))
-		ax.errorbar(np.mean(question_dim[subj,0]),np.mean(question_dim[subj,1]),xerr=np.std(question_dim[subj,0])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,1])/np.sqrt(np.sum(subj)))
+		ax.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,0])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,1])/np.sqrt(np.sum(subj)),
+					fmt='o',color=palette_metadata[ii],markeredgecolor='k',ecolor='lightgray',elinewidth=2,capsize=0)
 
 	box = ax.get_position()
 	ax.set_position([box.x0, box.y0, box.width * 0.6, box.height])
@@ -574,9 +591,11 @@ def fig2():
 	seniority = ['professor','postdoc','grad student','undergraduate']
 
 	ax = axes[2,1]
-	for fld in seniority:
+	palette_metadata = sns.color_palette('hls',len(seniority))
+	for ii,fld in enumerate(seniority):
 		subj = np.array(df['Q56'].apply(lambda x: pd.Series(x.lower().split(',')).isin([fld]).any()))
-		ax.errorbar(np.mean(question_dim[subj,0]),np.mean(question_dim[subj,1]),xerr=np.std(question_dim[subj,0])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,1])/np.sqrt(np.sum(subj)))
+		ax.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,0])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,1])/np.sqrt(np.sum(subj)),
+					fmt='o',color=palette_metadata[ii],markeredgecolor='k',ecolor='lightgray',elinewidth=2,capsize=0)
 
 	box = ax.get_position()
 	ax.set_position([box.x0, box.y0, box.width * 0.6, box.height])
@@ -624,8 +643,8 @@ def fig2_supp1():
 	mca = MCA(n_components=60,benzecri=True)
 	mca.fit(df[column_names])
 
-	axes[0].plot(mca.eigenvalues_/np.sum(mca.eigenvalues_),'bo')
-	axes[0].set(xlabel='eigenvalue',ylabel='variance explained')
+	axes[1].plot(mca.eigenvalues_/np.sum(mca.eigenvalues_),'ko')
+	axes[1].set(xlabel='eigenvalue',ylabel='variance explained')
 	# plt.show()
 	plt.savefig('figs/fig2_supp1.pdf')
 
@@ -774,22 +793,26 @@ def fig3():
 	# also need to make the colormap ticks say 'yes','maybe','no'
 	cg = sns.clustermap(qna, row_linkage=row_linkage, col_linkage=col_linkage, method="ward", figsize=(8, 8), xticklabels=1, yticklabels=0)
 
+	# color tree:
+	# https://stackoverflow.com/questions/62001483/dendogram-coloring-by-groups
+
 	# colorbar = cg.colorbar(ax.collections[0])
 	# colorbar.set_ticklabels(['Yes', 'Maybe', 'No'])
 	cg.ax_heatmap.set_xlabel('questions')
 	cg.ax_heatmap.set_ylabel('responses')
+	# cg.ax_heatmap.set_xticklabels(cg.ax_heatmap.get_xticklabels(), rotation=45,horizontalalignment='right')
 
 	tally = 0
 	col_cluster = fcluster(col_linkage,30,'distance')
 	for ii in set(col_cluster):
 		tally += sum(col_cluster == ii)
-		cg.ax_heatmap.plot([tally,tally],[0,qna.shape[0]],color='b')
+		cg.ax_heatmap.plot([tally,tally],[0,qna.shape[0]],color='1.0',linewidth=4)
 
 	tally = 0
 	row_cluster = fcluster(row_linkage,19,'distance')
 	for ii in set(row_cluster):
 		tally += sum(row_cluster == ii)
-		cg.ax_heatmap.plot([0,qna.shape[1]],[tally,tally],color='b')
+		cg.ax_heatmap.plot([0,qna.shape[1]],[tally,tally],color='1.0',linewidth=4)
 
 
 
@@ -801,6 +824,7 @@ def fig3():
 
 	# plt.savefig('figs/fig3_clustermap.pdf')
 	plt.show()
+	# exit()
 
 	# then return linkages for later analysis
 	# https://stackoverflow.com/questions/27924813/extracting-clusters-from-seaborn-clustermap
@@ -813,32 +837,151 @@ def fig3():
 	qna = np.array(qna)
 	# print(qna[:,col_cluster == 1])
 	width = 0.2
-	indices = np.arange(0,len(set(col_cluster)))
 
-	fig,axes = plt.subplots(len(set(row_cluster))+1,1, figsize=(8,8))
+
+
+
+	# indices = np.arange(0,len(set(col_cluster)))
+	# category_list = [np.mean(qna,axis=0)]
+	# for cluster in set(row_cluster):
+	# 	qna2 = qna[row_cluster == cluster,:]
+	# 	category_list.append(np.mean(qna2,axis=0))
+	# 	plt.step(range(len(category_list[-1])),category_list[-1])
+
+
+	# category_data = np.array(y=category_list)
+	# category_data = np.log2(category_data / category_data[0])
+	# category_data = category_data > 0
+	# category_palette = sns.color_palette('rocket_r', 5)
+	# plt.step(category_data)
+	# sns.heatmap(category_data,square=True,linewidths=.5,annot=True,cmap=category_palette)
+	# plt.show()
+
+
+	fig = plt.figure(constrained_layout=True,figsize=(16,10))
+	axes = []
+	gs = fig.add_gridspec(2,4)
+	axes.append(fig.add_subplot(gs[0,0]))
+	axes.append(fig.add_subplot(gs[0,1]))
+	axes.append(fig.add_subplot(gs[0,2:]))
+	axes.append(fig.add_subplot(gs[1,0]))
+	axes.append(fig.add_subplot(gs[1,1:3]))
+	axes.append(fig.add_subplot(gs[1,3]))
+
+	# heatmap
+
+	indices = np.arange(0,len(set(col_cluster)))
+	category_list = [[np.mean(qna[:,col_cluster == ii] == 1) for ii in set(col_cluster)]]
+	for cluster in set(row_cluster):
+		qna2 = qna[row_cluster == cluster,:]
+		category_list.append([np.mean(qna2[:,col_cluster == ii] == 1) for ii in set(col_cluster)])
+
+	category_data = np.array(category_list)
+
+	category_palette = sns.color_palette('rocket_r', 10)
 
 	ax = axes[0]
-	ax.bar(indices,[np.mean(qna[:,col_cluster == ii] == 1) for ii in set(col_cluster)],width,label='Yes')
-	ax.bar(indices+width,[np.mean(qna[:,col_cluster == ii] == 0) for ii in set(col_cluster)],width,label='Maybe')
-	ax.bar(indices+width*2,[np.mean(qna[:,col_cluster == ii] == -1) for ii in set(col_cluster)],width,label='No')
-	# ax.set_xticklabels(indices+width,indices+1)
-	# ax.set_position([box.x0, box.y0, box.width * 0.6, box.height])
-	ax.legend(loc='center left',prop={'size':5},bbox_to_anchor=(1,0.5))
-	ax.set_title('all responses')
-	# ax.legend()
+	hm = sns.heatmap(category_data,square=True,linewidths=.5,annot=True,ax=ax,cmap=category_palette, center=0.5, vmin=0, vmax=1)
 
-	for cluster in set(row_cluster):
-		ax = axes[cluster]
-		qna2 = qna[row_cluster == cluster,:]
+	ax = axes[1]
+	category_data = category_data / category_data[0]
+	category_data = category_data[1:]
+	category_data = np.log2(category_data)
+	# category_data = category_data > 0
+	category_palette = sns.color_palette('coolwarm', 3)
+	# category_palette = sns.cubehelix_palette(3, hue=0.05, rot=0, light=1.0, dark=0)
+	hm = sns.heatmap(category_data,square=True,linewidths=.5,annot=True,ax=ax,cmap=category_palette,center=0,vmin=-1,vmax=1)
+	# sns.heatmap(category_data,square=True,linewidths=.5,annot=True,cmap=category_palette)
+	# plt.show()
 
-		ax.bar(indices,[np.mean(qna2[:,col_cluster == ii] == 1) for ii in set(col_cluster)],width,label='Yes')
-		ax.bar(indices+width,[np.mean(qna2[:,col_cluster == ii] == 0) for ii in set(col_cluster)],width,label='Maybe')
-		ax.bar(indices+width*2,[np.mean(qna2[:,col_cluster == ii] == -1) for ii in set(col_cluster)],width,label='No')
-		# ax.set_xticklabels(indices+width,indices+1)
-		ax.legend(loc='center left',prop={'size':5},bbox_to_anchor=(1,0.5))
-		ax.set_title('Response cluster ' + str(cluster))
+	# TODO: add error bars/significance test?
 
-	plt.tight_layout()
+
+
+	ax = axes[2]
+	academic_fields = ['Neuroscience','Psychology','Biology','Philosophy','Sociology','Engineering','Medicine','History', 'Languages and Literature', 'Machine Learning', 'Mathematics', 'Statistics', 'Engineering', 'Ethology', 'Ecology']
+	field_metadata = []
+	
+	for ii,fld in enumerate(academic_fields):
+		subj = np.array(df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin([fld]).any()))
+		field_cluster = []
+		# field_cluster.append(np.mean(subj))
+		for cluster in set(row_cluster):
+			field_cluster.append(sum(subj[row_cluster == cluster]) / sum(subj))
+
+		field_metadata.append(field_cluster)
+
+	field_metadata = np.array(field_metadata)
+	field_metadata = np.floor(field_metadata*100)/100
+	category_palette = sns.color_palette('rocket_r', 5)
+
+	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,xticklabels=academic_fields,ax=ax)
+	hm.set_xticklabels(hm.get_xticklabels(), rotation=45,horizontalalignment='right')
+	# plt.show()
+	# exit()
+	# plt.show()
+
+	ax = axes[3]
+	sub_fields = [['systems','circuit','circuits'],['cognitive','cognition'],['computational','theoretical','theory'],['molecular','cellular']]
+	sub_field_names = ['systems+circuits','cognitive','computational','molecular']
+	df['Q57_6_TEXT'] = df['Q57_6_TEXT'].astype(str)
+	field_metadata = []
+	for ii,fld in enumerate(sub_fields):
+		subj = np.array(df['Q57_6_TEXT'].apply(lambda x: pd.Series(re.split(',|/|and',x.lower().strip())).isin(fld).any()))
+		field_cluster = []
+		# field_cluster.append(np.mean(subj))
+		for cluster in set(row_cluster):
+			field_cluster.append(sum(subj[row_cluster == cluster]) / sum(subj))
+
+		field_metadata.append(field_cluster)
+
+	field_metadata = np.array(field_metadata)
+	field_metadata = field_metadata
+	category_palette = sns.color_palette('rocket_r', 5)
+	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,xticklabels=sub_field_names,ax=ax)
+	hm.set_xticklabels(hm.get_xticklabels(), rotation=45,horizontalalignment='right')
+	# plt.show()
+
+
+	ax = axes[4]
+	academic_fields = ['rodents','fish','humans','drosophila','birds','in silico','c. elegans','other invertebrates','other mammals','other non-mammalian vertebrates','other non-animals']
+	field_metadata = []
+	
+	for ii,fld in enumerate(academic_fields):
+		subj = np.array(df['Q58'].apply(lambda x: pd.Series(x.lower().split(',')).isin([fld]).any()))
+		field_cluster = []
+		# field_cluster.append(np.mean(subj))
+		for cluster in set(row_cluster):
+			field_cluster.append(sum(subj[row_cluster == cluster]) / sum(subj))
+
+		field_metadata.append(field_cluster)
+
+	field_metadata = np.array(field_metadata)
+	field_metadata = field_metadata
+	category_palette = sns.color_palette('rocket_r', 5)
+	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,xticklabels=academic_fields,ax=ax)
+	hm.set_xticklabels(hm.get_xticklabels(), rotation=45,horizontalalignment='right')
+	# plt.show()
+
+	ax = axes[5]
+	academic_fields = ['professor','postdoc','grad student','undergraduate']
+	field_metadata = []
+	
+	for ii,fld in enumerate(academic_fields):
+		subj = np.array(df['Q56'].apply(lambda x: pd.Series(x.lower().split(',')).isin([fld]).any()))
+		field_cluster = []
+		# field_cluster.append(np.mean(subj))
+		for cluster in set(row_cluster):
+			field_cluster.append(sum(subj[row_cluster == cluster]) / sum(subj))
+
+		field_metadata.append(field_cluster)
+
+	field_metadata = np.array(field_metadata)
+	field_metadata = field_metadata
+	category_palette = sns.color_palette('rocket_r', 5)
+	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,xticklabels=academic_fields,ax=ax)
+	hm.set_xticklabels(hm.get_xticklabels(), rotation=45,horizontalalignment='right')
+
 	# plt.show()
 	plt.savefig('figs/fig4_cluster_responses.pdf')
 
@@ -855,9 +998,9 @@ if __name__ == '__main__':
 	# fig2_supp2()
 	# fig2_supp3()
 
-	# fig3()
+	fig3()
 
-	latex_questions_table()
+	# latex_questions_table()
 
 	# consistency_of_responses()
 	# plot_eigenvalues()
