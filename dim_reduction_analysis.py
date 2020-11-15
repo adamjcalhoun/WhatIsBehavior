@@ -15,6 +15,7 @@ import seaborn as sns
 from matplotlib.colors import ListedColormap
 
 palette_YMN = sns.color_palette('rocket_r', 3)
+# palette_YMN = sns.color_palette('magma', 3)
 
 # USE MCA INSTEAD OF PCA
 # https://github.com/esafak/mca
@@ -90,222 +91,6 @@ def dim_reduction(df,dim_type,with_components=False):
 
 
 
-def plot_PCA_by_field(dim_1=0,dim_2=1):
-	# we really want to be using MCA (Multiple correspondence analysis)
-	# first load in the questionnaire and filter by responses
-	df = load_questionnaire(survey_file)
-	df = filter_questionnaire(df)
-
-	
-	
-	column_names = ['Q' + str(i+2) for i in range(48)]
-	question_dim = dim_reduction(df[column_names],'mca')
-	question_dim = np.array(question_dim)
-
-	academic_fields = ['Neuroscience','Psychology','Biology','Philosophy','Sociology','Engineering','Medicine','History', 'Languages and Literature', 'Machine Learning', 'Mathematics', 'Statistics', 'Engineering', 'Ethology', 'Ecology']
-	plt.figure(figsize=(15,15))
-
-	for fld in academic_fields:
-		subj = np.array(df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin([fld]).any()))
-		plt.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)))
-
-	plt.legend(academic_fields)
-	plt.xlabel('Factor ' + str(dim_1))
-	plt.ylabel('Factor ' + str(dim_2))
-	plt.savefig('figs/mca_all_fields.pdf')
-	# plt.show()
-
-	plt.figure(figsize=(15,15))
-	academic_fields = ['Neuroscience','Psychology','Biology']
-	for fld in academic_fields:
-		subj = np.array(df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin([fld]).any()))
-		plt.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)))
-
-	sub_fields = [['systems','circuit','circuits'],['cognitive','cognition'],['computational','theoretical','theory'],['molecular','cellular']]
-	sub_field_names = ['systems+circuits','cognitive','computational','molecular']
-	df['Q57_6_TEXT'] = df['Q57_6_TEXT'].astype(str)
-	for fld in sub_fields:
-		subj = np.array(df['Q57_6_TEXT'].apply(lambda x: pd.Series(re.split(',|/|and',x.lower().strip())).isin(fld).any()))
-		# print((np.mean(question_dim[subj,0]),np.mean(question_dim[subj,1]),np.std(question_dim[subj,0])/np.sqrt(np.sum(subj)),np.std(question_dim[subj,1])/np.sqrt(np.sum(subj))))
-		plt.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)))
-
-	plt.legend(academic_fields + sub_field_names)
-	plt.xlabel('Factor ' + str(dim_1))
-	plt.ylabel('Factor ' + str(dim_2))
-	plt.savefig('figs/mca_subfields.pdf')
-	# plt.show()
-
-def plot_PCA_by_animal():
-	# we really want to be using MCA (Multiple correspondence analysis)
-	# first load in the questionnaire and filter by responses
-	df = load_questionnaire(survey_file)
-	df = filter_questionnaire(df)
-
-	animals = ['rodents','fish','humans','drosophila','birds','in silico','c. elegans','other invertebrates','other mammals','other non-mammalian vertebrates','other non-animals']
-	column_names = ['Q' + str(i+2) for i in range(48)]
-	question_dim = dim_reduction(df[column_names],'mca')
-	question_dim = np.array(question_dim)
-
-	plt.figure(figsize=(15,15))
-	for fld in animals:
-		subj = np.array(df['Q58'].apply(lambda x: pd.Series(x.lower().split(',')).isin([fld]).any()))
-		plt.errorbar(np.mean(question_dim[subj,0]),np.mean(question_dim[subj,1]),xerr=np.std(question_dim[subj,0])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,1])/np.sqrt(np.sum(subj)))
-
-	plt.legend(animals)
-	plt.xlabel('PC1')
-	plt.ylabel('PC2')
-	plt.savefig('figs/mca_animals.pdf')
-	# plt.show()
-
-
-def plot_PCA_by_seniority():
-	# we really want to be using MCA (Multiple correspondence analysis)
-	# first load in the questionnaire and filter by responses
-	df = load_questionnaire(survey_file)
-	df = filter_questionnaire(df)
-
-	seniority = ['professor','postdoc','grad student','undergraduate']
-	column_names = ['Q' + str(i+2) for i in range(48)]
-	question_dim = dim_reduction(df[column_names],'mca')
-	question_dim = np.array(question_dim)
-
-	plt.figure(figsize=(15,15))
-	for fld in seniority:
-		subj = np.array(df['Q56'].apply(lambda x: pd.Series(x.lower().split(',')).isin([fld]).any()))
-		plt.errorbar(np.mean(question_dim[subj,0]),np.mean(question_dim[subj,1]),xerr=np.std(question_dim[subj,0])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,1])/np.sqrt(np.sum(subj)))
-
-	plt.legend(seniority)
-	plt.xlabel('Factor 1')
-	plt.ylabel('Factor 2')
-	plt.savefig('figs/mca_seniority.pdf')
-	# plt.show()
-
-
-def plot_PCA_loadings():
-	df = load_questionnaire(survey_file)
-	save_df = df
-	df = filter_questionnaire(df)
-
-	column_names = ['Q' + str(i+2) for i in range(48)]
-	question_dim, components_ = dim_reduction(df[column_names],'mca',with_components=True)
-
-	# print(pd.get_dummies(df[column_names]))
-	# print(components_.index.values)
-	# print(np.array(components_))
-	# exit()
-
-	row_names = components_.index.values
-	components_ = np.array(components_)
-	plt.plot(components_[:,:3],'.')
-	plt.legend(['Factor 1', 'Factor 2', 'Factor 3'])
-	plt.xlabel('question')
-	plt.ylabel('loading')
-	plt.savefig('figs/mca_loadings.pdf')
-	# plt.show()
-
-	print('top 3 and bottom 3 questions from Factor 1:')
-	for elm in (-components_[:,0]).argsort()[:3]:
-		question = row_names[elm].split('_')[0]
-		answer = row_names[elm].split('_')[1]
-		print(answer + ':    ' + save_df[question].iloc[0])
-	for elm in (components_[:,0]).argsort()[:3]:
-		question = row_names[elm].split('_')[0]
-		answer = row_names[elm].split('_')[1]
-		print(answer + ':    ' + save_df[question].iloc[0])
-
-	print('top 3 and bottom 3 questions from Factor 2:')
-	for elm in (-components_[:,1]).argsort()[:3]:
-		question = row_names[elm].split('_')[0]
-		answer = row_names[elm].split('_')[1]
-		print(answer + ':    ' + save_df[question].iloc[0])
-
-	for elm in (components_[:,1]).argsort()[:3]:
-		question = row_names[elm].split('_')[0]
-		answer = row_names[elm].split('_')[1]
-		print(answer + ':    ' + save_df[question].iloc[0])
-
-	print('top 3 and bottom 3 questions from Factor 3:')
-	for elm in (-components_[:,2]).argsort()[:3]:
-		question = row_names[elm].split('_')[0]
-		answer = row_names[elm].split('_')[1]
-		print(answer + ':    ' + save_df[question].iloc[0])
-		
-	for elm in (components_[:,2]).argsort()[:3]:
-		question = row_names[elm].split('_')[0]
-		answer = row_names[elm].split('_')[1]
-		print(answer + ':    ' + save_df[question].iloc[0])
-
-	# top 3 and bottom 3 questions from PC1:
-	# Does a behavior need to be intentional (does every behavior an animal produces have a purpose)?
-	# Behaviors are always discrete; you are either performing that behavior or you are not.
-	# All behaviors an animal performs can potentially be identified from recorded video data by using a smart enough computer algorithm.
-	# Is sweating a behavior?
-	# The knee-jerk reflex is when a tap of a hammer results in the leg extending once before coming to rest. Is the knee-jerk reflex in adults a behavior?
-	# A person sweats in response to hot air. Is this person behaving?
-	# top 3 and bottom 3 questions from PC2:
-	# A behavior is always the output of motor activity
-	# The knee-jerk reflex is when a tap of a hammer results in the leg extending once before coming to rest. Is the knee-jerk reflex in adults a behavior?
-	# A behavior is always potentially measurable
-	# An animal hears one sound, then another. In its mind, it compares the two sounds. Is it behaving?
-	# Is learning a behavior?
-	# Working memory is temporarily holding something in memory. Is working memory a behavior?
-
-def cluster_responses():
-	import umap
-	df = load_questionnaire(survey_file)
-	df = filter_questionnaire(df)
-
-	column_names = ['Q' + str(i+2) for i in range(48)]
-	question_dim = dim_reduction(df[column_names],'mca')
-	question_dim = np.array(question_dim)
-
-	reducer = umap.UMAP()
-	embedded = reducer.fit_transform(question_dim)
-
-	plt.plot(embedded[:,0],embedded[:,1],'.')
-	plt.show()
-
-def plot_clustermap():
-	df = load_questionnaire(survey_file)
-	save_df = df
-	df = filter_questionnaire(df)
-
-	column_names = ['Q' + str(i+2) for i in range(48)]
-	# should use jaccard or dice for categorical data??
-	# sns.clustermap(ynm_to_dig(df[column_names]),metric='jaccard')
-	# sns.clustermap(ynm_to_dig(df[column_names]),metric='dice')
-
-	# need to set: colors by theme (subject, seniority, etc)
-	# https://stackoverflow.com/questions/62001483/dendogram-coloring-by-groups
-	# also linkage method (single, ward, etc)
-	# sns.clustermap((ynm_to_dig(df[column_names])+1)/2,metric='jensenshannon')
-	sns.clustermap(ynm_to_dig(df[column_names]),method='ward',metric='euclidean')
-	plt.savefig('figs/clustermap.pdf')
-	plt.show()
-
-	# then return linkages for later analysis
-	# https://stackoverflow.com/questions/27924813/extracting-clusters-from-seaborn-clustermap
-	# break down clusters into both question and answer clusters, and report % Y/N/M for answers
-	# -> can do major clusters and sub-clusters...
-	# in each answer cluster - then give some interpretation
-	# also report our metadata: by subfield, by seniority, by model organism
-
-def get_sub_field():
-	# Neurosience: Q57_6_TEXT
-	sub_fields = ['systems','circuit','circuits','behavior','cognitive','computational','neuroethology','molecular','cellular',
-				  'theoretical','imaging','biophysics','cognition','memory','visual','vision',]
-	# Physics: Q57_7_TEXT
-	sub_fields = ['biophysics','biological physics']
-	# Psychology: Q57_19_TEXT
-	sub_fields = ['biological','cognitive','comparative','experimental','clinical','cognition','learning','social',
-				  'psychophysics','perception']
-	# model systems: Q58
-	model_system = ['rodents','fish','humans','drosophila','birds','in silico','c. elegans','other invertebrates','other mammals','other non-mammalian vertebrates','other non-animals']
-
-def save_latex_chart():
-	# https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_latex.html
-	pass
-
 def latex_questions_table():
 	df = load_questionnaire(survey_file)
 	pd.set_option('display.max_colwidth', None)
@@ -358,6 +143,8 @@ def fig1():
 		# print(question + str((yes_responses[elm],maybe_responses[elm],no_responses[elm])) + ':    ' + save_df[question].iloc[0])
 		resp_list.append([question,yes_responses[elm],maybe_responses[elm],no_responses[elm]])
 
+	resp_list[2][0] = format_question('Is reading a behavior?')
+	resp_list[3][0] = format_question('Choosing not to move toward food')
 	df = pd.DataFrame(resp_list,columns=['Questions','Yes','Maybe','No'])
 	df = pd.melt(df,id_vars='Questions',var_name='answers',value_name='response')
 	ax = sns.barplot(ax=axes[0,0],x='Questions',y='response',hue='answers',data=df,palette=palette_YMN)
@@ -373,6 +160,11 @@ def fig1():
 		# print(question + str((yes_responses[elm],maybe_responses[elm],no_responses[elm])) +  ':    ' + save_df[question].iloc[0])
 		resp_list.append([question,yes_responses[elm],maybe_responses[elm],no_responses[elm]])
 
+	resp_list[0][0] = format_question('Does behavior need to be intentional?')
+	resp_list[1][0] = format_question('Need to be anthropomorphized?')
+	resp_list[2][0] = format_question('Behavior must relate to something?')
+	resp_list[3][0] = format_question('Is disliking salty food a behavior?')
+	resp_list[4][0] = format_question('Is free behavior the same as restrained behavior?')
 	df = pd.DataFrame(resp_list,columns=['Questions','Yes','Maybe','No'])
 	df = pd.melt(df,id_vars='Questions',var_name='answers',value_name='response')
 	ax = sns.barplot(ax=axes[0,1],x='Questions',y='response',hue='answers',data=df,palette=palette_YMN)
@@ -388,6 +180,7 @@ def fig1():
 		# print(question + str((yes_responses[elm],maybe_responses[elm],no_responses[elm])) +  ':    ' + save_df[question].iloc[0])
 		resp_list.append([question,yes_responses[elm],maybe_responses[elm],no_responses[elm]])
 
+	resp_list[4][0] = format_question('Is behavior in VR the same as real life?')
 	df = pd.DataFrame(resp_list,columns=['Questions','Yes','Maybe','No'])
 	df = pd.melt(df,id_vars='Questions',var_name='answers',value_name='response')
 	ax = sns.barplot(ax=axes[1,0],x='Questions',y='response',hue='answers',data=df,palette=palette_YMN)
@@ -404,6 +197,8 @@ def fig1():
 		# print(question + str((yes_responses[elm],maybe_responses[elm],no_responses[elm])) +  ':    ' + save_df[question].iloc[0])
 		resp_list.append([question,yes_responses[elm],maybe_responses[elm],no_responses[elm]])
 
+	resp_list[0][0] = format_question('Is behavior in VR the same as real life?')
+	# resp_list[2][0] = format_question('Is seeking relief?')
 	df = pd.DataFrame(resp_list,columns=['Questions','Yes','Maybe','No'])
 	df = pd.melt(df,id_vars='Questions',var_name='answers',value_name='response')
 	ax = sns.barplot(ax=axes[1,1],x='Questions',y='response',hue='answers',data=df,palette=palette_YMN)
@@ -462,14 +257,14 @@ def plot_eigenvalues():
 	plt.savefig('figs/mca_eigs.pdf')
 	# plt.show()
 
-def fig2():
+def fig2(show_plot=False):
 	fig,axes = plt.subplots(3,2, figsize=(8,8))
 	fig.subplots_adjust(hspace=.5,wspace=.3)
 
 	dim_1=0
-	dim_2=2
-	panel_letter_x = -1.5
-	panel_letter_y = 1.05
+	dim_2=1
+	panel_letter_x = -0.4
+	panel_letter_y = 1.1
 	panel_font_size = 15
 
 	# panel 0: MCA loadings
@@ -505,46 +300,55 @@ def fig2():
 		questions.append(save_df[row_names[elm].split('_')[0]].iloc[0] + ' ' + row_names[elm].split('_')[1])
 		loadings.append(components_[:,dim_2][elm])
 
+	ax = axes[0,1]
 	axes[0,1].hlines(range(-num_dim1_loadings,-num_dim1_loadings-len(loadings),-1),0,loadings,colors='r')
 	# axes[0,0].tick_params(axis='x',labelsize=6)
 	axes[0,1].set_yticks(range(0,-num_dim1_loadings-len(loadings),-1))
 	axes[0,1].set_yticklabels(questions,size=6)
 	# axes[0,0].set(ylim=(0, 1),title='Largest Factor 1 loadings',xlabel=None)
 	axes[0,1].set(title='Largest factor loadings',xlabel=None)
-	axes[0,1].legend(['Factor 1','Factor 2'],prop={'size':10})
-	axes[0,1].text(panel_letter_x,panel_letter_y,'a',size=panel_font_size,weight='bold')
+	box = ax.get_position()
+	ax.set_position([box.x0, box.y0, box.width * 0.6, box.height])
+	axes[0,1].legend(['Factor ' + str(dim_1),'Factor ' + str(dim_2)],loc='center left',prop={'size':10},bbox_to_anchor=(1,0.85))
+	axes[0,1].text(panel_letter_x-2.15,panel_letter_y,'a',size=panel_font_size,weight='bold',transform=ax.transAxes)
 
 
 	# panel 1: by field
 	column_names = ['Q' + str(i+2) for i in range(48)]
-	# academic_fields = ['Neuroscience','Psychology']
-	# academic_fields = ['Sociology']
-	academic_fields = ['Neuroscience','Psychology','Biology','Philosophy','Sociology','Engineering','Medicine','History', 'Languages and Literature', 'Machine Learning', 'Mathematics', 'Statistics', 'Engineering', 'Ethology', 'Ecology']
+	# academic_fields = ['Neuroscience','Psychology','Biology','Philosophy','Sociology','Engineering','Medicine','History', 'Languages and Literature', 'Machine Learning', 'Mathematics', 'Statistics', 'Engineering', 'Ethology', 'Ecology']
 
-	df = df[df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin(academic_fields).any())]
-	# print(df)
-	question_dim, components_ = dim_reduction(df[column_names],'mca',with_components=True)
-	row_names = components_.index.values
+	# df = df[df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin(academic_fields).any())]
+	# question_dim, components_ = dim_reduction(df[column_names],'mca',with_components=True)
+	# row_names = components_.index.values
+
+
+	# palette_metadata = sns.color_palette('hls',len(academic_fields))
+	# ax = axes[1,0]
+	# question_dim = np.array(question_dim)
+	# for ii,fld in enumerate(academic_fields):
+	# 	subj = np.array(df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin([fld]).any()))
+	# 	ax.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)),
+	# 						fmt='o',color=palette_metadata[ii],markeredgecolor='k',ecolor='lightgray',elinewidth=2,capsize=0)
+	academic_fields = [['Neuroscience','Psychology','Biology','Medicine'],['Engineering','Mathematics', 'Statistics','Machine Learning'],['Ethology', 'Ecology'],['Philosophy','Sociology','History', 'Languages and Literature']]
+	academic_field_names = ['Biological Sciences','Math/Engineering','Ecology','Humanities']
+	# df = df[df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin(academic_fields).any())]
+	# question_dim, components_ = dim_reduction(df[column_names],'mca',with_components=True)
+	# row_names = components_.index.values
 
 
 	palette_metadata = sns.color_palette('hls',len(academic_fields))
 	ax = axes[1,0]
 	question_dim = np.array(question_dim)
 	for ii,fld in enumerate(academic_fields):
-		subj = np.array(df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin([fld]).any()))
-		# print(question_dim.shape)
-		# print(subj.shape)
-		# print(question_dim[subj,0])
-		# exit()
-		# axes[1,0].errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)),color=palette_metadata[ii])
-		axes[1,0].errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)),
+		subj = np.array(df['Q57'].apply(lambda x: pd.Series(x.split(',')).isin(fld).any()))
+		ax.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,dim_1])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,dim_2])/np.sqrt(np.sum(subj)),
 							fmt='o',color=palette_metadata[ii],markeredgecolor='k',ecolor='lightgray',elinewidth=2,capsize=0)
 
 	box = ax.get_position()
 	ax.set_position([box.x0, box.y0, box.width * 0.6, box.height])
-	ax.legend(academic_fields,loc='center left',prop={'size':5},bbox_to_anchor=(1,0.5))
+	ax.legend(academic_field_names,loc='center left',prop={'size':5},bbox_to_anchor=(1,0.5))
 	ax.set(xlabel='Factor ' + str(dim_1),ylabel='Factor ' + str(dim_2))
-	ax.text(panel_letter_x,panel_letter_y,'a',size=panel_font_size,weight='bold')
+	ax.text(panel_letter_x,panel_letter_y,'b',size=panel_font_size,weight='bold',transform=ax.transAxes)
 
 
 	# panel 2: by subfield
@@ -564,7 +368,7 @@ def fig2():
 	ax.set_position([box.x0, box.y0, box.width * 0.6, box.height])
 	ax.legend(sub_field_names,loc='center left',prop={'size':5},bbox_to_anchor=(1,0.5))
 	ax.set(xlabel='Factor ' + str(dim_1),ylabel='Factor ' + str(dim_2))
-	ax.text(panel_letter_x,panel_letter_y,'b',size=panel_font_size,weight='bold')
+	ax.text(panel_letter_x,panel_letter_y,'c',size=panel_font_size,weight='bold',transform=ax.transAxes)
 	
 
 	
@@ -572,20 +376,30 @@ def fig2():
 	# panel 3: by animal model
 
 
-	animals = ['rodents','fish','humans','drosophila','birds','in silico','c. elegans','other invertebrates','other mammals','other non-mammalian vertebrates','other non-animals']
+	# animals = ['rodents','fish','humans','drosophila','birds','in silico','c. elegans','other invertebrates','other mammals','other non-mammalian vertebrates','other non-animals']
+
+	# ax = axes[2,0]
+	# palette_metadata = sns.color_palette('hls',len(animals))
+	# for ii,fld in enumerate(animals):
+	# 	subj = np.array(df['Q58'].apply(lambda x: pd.Series(x.lower().split(',')).isin([fld]).any()))
+	# 	ax.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,0])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,1])/np.sqrt(np.sum(subj)),
+	# 				fmt='o',color=palette_metadata[ii],markeredgecolor='k',ecolor='lightgray',elinewidth=2,capsize=0)
+
+	animals = [['humans'],['rodents','other mammals'],['fish','birds','other non-mammalian vertebrates'],['drosophila','c. elegans','other invertebrates'],['in silico']]
+	animal_names = ['humans','mammals','other vertebrates','invertebrates','in silico']
 
 	ax = axes[2,0]
 	palette_metadata = sns.color_palette('hls',len(animals))
 	for ii,fld in enumerate(animals):
-		subj = np.array(df['Q58'].apply(lambda x: pd.Series(x.lower().split(',')).isin([fld]).any()))
+		subj = np.array(df['Q58'].apply(lambda x: pd.Series(x.lower().split(',')).isin(fld).any()))
 		ax.errorbar(np.mean(question_dim[subj,dim_1]),np.mean(question_dim[subj,dim_2]),xerr=np.std(question_dim[subj,0])/np.sqrt(np.sum(subj)),yerr=np.std(question_dim[subj,1])/np.sqrt(np.sum(subj)),
 					fmt='o',color=palette_metadata[ii],markeredgecolor='k',ecolor='lightgray',elinewidth=2,capsize=0)
 
 	box = ax.get_position()
 	ax.set_position([box.x0, box.y0, box.width * 0.6, box.height])
-	ax.legend(animals,loc='center left',prop={'size':5},bbox_to_anchor=(1,0.5))
+	ax.legend(animal_names,loc='center left',prop={'size':5},bbox_to_anchor=(1,0.5))
 	ax.set(xlabel='Factor ' + str(dim_1),ylabel='Factor ' + str(dim_2))
-	ax.text(panel_letter_x,panel_letter_y,'c',size=panel_font_size,weight='bold')
+	ax.text(panel_letter_x,panel_letter_y,'d',size=panel_font_size,weight='bold',transform=ax.transAxes)
 
 	# panel 4: by seniority
 	seniority = ['professor','postdoc','grad student','undergraduate']
@@ -601,11 +415,13 @@ def fig2():
 	ax.set_position([box.x0, box.y0, box.width * 0.6, box.height])
 	ax.legend(seniority,loc='center left',prop={'size':5},bbox_to_anchor=(1,0.5))
 	ax.set(xlabel='Factor ' + str(dim_1),ylabel='Factor ' + str(dim_2))
-	ax.text(panel_letter_x,panel_letter_y,'d',size=panel_font_size,weight='bold')
+	ax.text(panel_letter_x,panel_letter_y,'e',size=panel_font_size,weight='bold',transform=ax.transAxes)
 
 	# plt.tight_layout()
-	# plt.show()
-	plt.savefig('figs/fig2_mca.pdf')
+	if show_plot:
+		plt.show()
+	else:
+		plt.savefig('figs/fig2_mca.pdf')
 
 
 def fig2_supp1():
@@ -759,7 +575,7 @@ def fig2_supp3():
 	# table with metadata summary
 	pass
 
-def fig3():
+def fig3(show_plot=False,print_cluster_questions=False):
 	# fig.subplots_adjust(hspace=.3,wspace=.3)
 
 	df = load_questionnaire(survey_file)
@@ -791,29 +607,56 @@ def fig3():
 	# need to make the colormap discrete
 	# https://stackoverflow.com/questions/38836154/discrete-legend-in-seaborn-heatmap-plot/56678411
 	# also need to make the colormap ticks say 'yes','maybe','no'
-	cg = sns.clustermap(qna, row_linkage=row_linkage, col_linkage=col_linkage, method="ward", figsize=(8, 8), xticklabels=1, yticklabels=0)
+
+	col_cluster = fcluster(col_linkage,30,'distance')
+	row_cluster = fcluster(row_linkage,19,'distance')
+
+	# print(col_cluster)
+	color_palette = sns.color_palette('Set2',len(set(col_cluster)))
+	col_colors = [color_palette[ii-1] for ii in col_cluster]
+	color_palette = sns.color_palette('Paired',len(set(row_cluster)))
+	row_colors = [color_palette[ii-1] for ii in row_cluster]
+	cg = sns.clustermap(qna, row_linkage=row_linkage, col_linkage=col_linkage, method="ward", figsize=(8, 8), 
+		xticklabels=1, yticklabels=0, col_colors=col_colors, row_colors=row_colors)
+	# colormap = cg.collections[0]
 
 	# color tree:
 	# https://stackoverflow.com/questions/62001483/dendogram-coloring-by-groups
 
-	# colorbar = cg.colorbar(ax.collections[0])
-	# colorbar.set_ticklabels(['Yes', 'Maybe', 'No'])
+	colorbar = cg.ax_heatmap.collections[0].colorbar
+	colorbar.set_ticks([0.667,0,-0.667])
+	colorbar.set_ticklabels(['Yes', 'Maybe', 'No'])
 	cg.ax_heatmap.set_xlabel('questions')
 	cg.ax_heatmap.set_ylabel('responses')
 	# cg.ax_heatmap.set_xticklabels(cg.ax_heatmap.get_xticklabels(), rotation=45,horizontalalignment='right')
 
 	tally = 0
-	col_cluster = fcluster(col_linkage,30,'distance')
 	for ii in set(col_cluster):
 		tally += sum(col_cluster == ii)
 		cg.ax_heatmap.plot([tally,tally],[0,qna.shape[0]],color='1.0',linewidth=4)
 
 	tally = 0
-	row_cluster = fcluster(row_linkage,19,'distance')
 	for ii in set(row_cluster):
 		tally += sum(row_cluster == ii)
 		cg.ax_heatmap.plot([0,qna.shape[1]],[tally,tally],color='1.0',linewidth=4)
 
+	# need to draw the text by hand (maybe we can find the cluster positions programmatically?)
+	# cg.ax_heatmap.text(0,0,'group 1',size=12,weight='bold',transform=cg.ax._heatmap.transAxes)
+	# cg.ax_heatmap.text(0,1,'group 1',size=10,color='w',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(0.05,1.01,'1',size=10,color='w',ha='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(0.25,1.01,'2',size=10,color='w',ha='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(0.49,1.01,'3',size=10,color='w',ha='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(0.62,1.01,'4',size=10,color='w',ha='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(0.77,1.01,'5',size=10,color='w',ha='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(0.92,1.01,'6',size=10,color='w',ha='center',transform=cg.ax_heatmap.transAxes)
+
+	cg.ax_heatmap.text(-0.035,0.85,'A',size=10,color='w',rotation='vertical',va='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(-0.035,0.655,'B',size=10,color='w',rotation='vertical',va='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(-0.035,0.55,'C',size=10,color='w',rotation='vertical',va='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(-0.035,0.45,'D',size=10,color='w',rotation='vertical',va='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(-0.035,0.3,'E',size=10,color='w',rotation='vertical',va='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(-0.035,0.15,'F',size=10,color='w',rotation='vertical',va='center',transform=cg.ax_heatmap.transAxes)
+	cg.ax_heatmap.text(-0.035,0.05,'G',size=10,color='w',rotation='vertical',va='center',transform=cg.ax_heatmap.transAxes)
 
 
 	# https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html
@@ -822,9 +665,10 @@ def fig3():
 	# https://joernhees.de/blog/tag/hierarchical-clustering/
 	# https://stackoverflow.com/questions/28687882/cutting-scipy-hierarchical-dendrogram-into-clusters-via-a-threshold-value
 
-	# plt.savefig('figs/fig3_clustermap.pdf')
-	plt.show()
-	# exit()
+	if show_plot:
+		plt.show()
+	else:
+		plt.savefig('figs/fig3_clustermap.pdf')
 
 	# then return linkages for later analysis
 	# https://stackoverflow.com/questions/27924813/extracting-clusters-from-seaborn-clustermap
@@ -858,6 +702,8 @@ def fig3():
 	# plt.show()
 
 
+	resp_metric = -1
+
 	fig = plt.figure(constrained_layout=True,figsize=(16,10))
 	axes = []
 	gs = fig.add_gridspec(2,4)
@@ -871,17 +717,18 @@ def fig3():
 	# heatmap
 
 	indices = np.arange(0,len(set(col_cluster)))
-	category_list = [[np.mean(qna[:,col_cluster == ii] == 1) for ii in set(col_cluster)]]
+	category_list = [[np.mean(qna[:,col_cluster == ii] == resp_metric) for ii in set(col_cluster)]]
 	for cluster in set(row_cluster):
 		qna2 = qna[row_cluster == cluster,:]
-		category_list.append([np.mean(qna2[:,col_cluster == ii] == 1) for ii in set(col_cluster)])
+		category_list.append([np.mean(qna2[:,col_cluster == ii] == resp_metric) for ii in set(col_cluster)])
 
 	category_data = np.array(category_list)
 
 	category_palette = sns.color_palette('rocket_r', 10)
 
 	ax = axes[0]
-	hm = sns.heatmap(category_data,square=True,linewidths=.5,annot=True,ax=ax,cmap=category_palette, center=0.5, vmin=0, vmax=1)
+	hm = sns.heatmap(category_data,square=True,linewidths=.5,annot=True,ax=ax,cmap=category_palette, 
+					xticklabels=[str(ii+1) for ii in range(6)],yticklabels=['all','A','B','C','D','E','F','G'],center=0.5, vmin=0, vmax=1)
 
 	ax = axes[1]
 	category_data = category_data / category_data[0]
@@ -890,12 +737,26 @@ def fig3():
 	# category_data = category_data > 0
 	category_palette = sns.color_palette('coolwarm', 3)
 	# category_palette = sns.cubehelix_palette(3, hue=0.05, rot=0, light=1.0, dark=0)
-	hm = sns.heatmap(category_data,square=True,linewidths=.5,annot=True,ax=ax,cmap=category_palette,center=0,vmin=-1,vmax=1)
+	hm = sns.heatmap(category_data,square=True,linewidths=.5,annot=True,ax=ax,cmap=category_palette,
+					xticklabels=[str(ii+1) for ii in range(6)],yticklabels=['A','B','C','D','E','F','G'],center=0,vmin=-1,vmax=1)
 	# sns.heatmap(category_data,square=True,linewidths=.5,annot=True,cmap=category_palette)
 	# plt.show()
 
 	# TODO: add error bars/significance test?
 
+	# for cluster in set(col_cluster):
+	# 	print('cluster num: ' + str(cluster))
+	# 	print(np.where(col_cluster == cluster))
+
+	if print_cluster_questions:
+		for cluster in set(col_cluster):
+			print('cluster num: ' + str(cluster))
+			for elm in np.where(col_cluster == cluster)[0]:
+				# print(elm)
+				print(save_df['Q' + str(elm+2)].iloc[0])
+
+	# print(questions)
+	# exit()
 
 
 	ax = axes[2]
@@ -915,7 +776,8 @@ def fig3():
 	field_metadata = np.floor(field_metadata*100)/100
 	category_palette = sns.color_palette('rocket_r', 5)
 
-	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,xticklabels=academic_fields,ax=ax)
+	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,
+					xticklabels=academic_fields,yticklabels=['A','B','C','D','E','F','G'],ax=ax)
 	hm.set_xticklabels(hm.get_xticklabels(), rotation=45,horizontalalignment='right')
 	# plt.show()
 	# exit()
@@ -938,7 +800,8 @@ def fig3():
 	field_metadata = np.array(field_metadata)
 	field_metadata = field_metadata
 	category_palette = sns.color_palette('rocket_r', 5)
-	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,xticklabels=sub_field_names,ax=ax)
+	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,
+					xticklabels=sub_field_names,yticklabels=['A','B','C','D','E','F','G'],ax=ax)
 	hm.set_xticklabels(hm.get_xticklabels(), rotation=45,horizontalalignment='right')
 	# plt.show()
 
@@ -959,7 +822,8 @@ def fig3():
 	field_metadata = np.array(field_metadata)
 	field_metadata = field_metadata
 	category_palette = sns.color_palette('rocket_r', 5)
-	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,xticklabels=academic_fields,ax=ax)
+	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,
+					xticklabels=academic_fields,yticklabels=['A','B','C','D','E','F','G'],ax=ax)
 	hm.set_xticklabels(hm.get_xticklabels(), rotation=45,horizontalalignment='right')
 	# plt.show()
 
@@ -979,11 +843,14 @@ def fig3():
 	field_metadata = np.array(field_metadata)
 	field_metadata = field_metadata
 	category_palette = sns.color_palette('rocket_r', 5)
-	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,xticklabels=academic_fields,ax=ax)
+	hm = sns.heatmap(field_metadata.T,square=True,linewidths=.5,annot=True,cmap=category_palette,
+					xticklabels=academic_fields,yticklabels=['A','B','C','D','E','F','G'],ax=ax)
 	hm.set_xticklabels(hm.get_xticklabels(), rotation=45,horizontalalignment='right')
 
-	# plt.show()
-	plt.savefig('figs/fig4_cluster_responses.pdf')
+	if show_plot:
+		plt.show()
+	else:
+		plt.savefig('figs/fig4_cluster_responses.pdf')
 
 
 
@@ -991,14 +858,14 @@ if __name__ == '__main__':
 	# how many PCs do we really need? look at variance explained by number of components
 	# for hierarchical clustering: convert to dummy variables and use Jaccard or Dice
 
-	# fig1()
+	fig1()
 	
-	# fig2()
+	# fig2(show_plot=False)
 	# fig2_supp1()
 	# fig2_supp2()
 	# fig2_supp3()
 
-	fig3()
+	# fig3(show_plot=False)
 
 	# latex_questions_table()
 
