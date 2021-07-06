@@ -7,8 +7,7 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 
-survey_file = 'C:/Users/adamc/Downloads/wib.csv'
-survey_file = '/Users/adamjc/Downloads/wib.csv'
+survey_file = 'wib_clean.csv'
 
 # let's break up figure 1 into two figures, one with the example diversity in questions
 # and one with the regression prediction (showing that even though people don't agree, they are predictable)

@@ -240,14 +240,8 @@ class Survey:
 				y_test = ynm[sequence[fold::num_folds],Q]+1
 				y_pred = regr.predict(X_test)
 
-				# can compare to probabilty performance over chance (which is p(y_train=0)*(p(y_test)=0 etc)
-				# or just show each prediction separately
-				# expected.append(np.sum([np.mean(y == ans)*np.mean(y_test == ans) for ans in range(3)]))
-
-				# performance.append(np.mean(y_pred == y_test))
 				df = pd.concat((df,pd.DataFrame([[Q,np.mean(y_pred == y_test)]],columns=['Questions','Performance'])))
 
-			# fold_performance.append(performance)
 
 		yes_folds = np.array([yes[sequence[ii::num_folds],:train_questions] for ii in range(num_folds)])
 		no_folds = np.array([no[sequence[ii::num_folds],:train_questions] for ii in range(num_folds)])
@@ -269,14 +263,8 @@ class Survey:
 				y_test = ynm[sequence[fold::num_folds],Q]+1
 				y_pred = regr.predict(X_test)
 
-				# can compare to probabilty performance over chance (which is p(y_train=0)*(p(y_test)=0 etc)
-				# or just show each prediction separately
-				# expected.append(np.sum([np.mean(y == ans)*np.mean(y_test == ans) for ans in range(3)]))
-				# performance.append(np.mean(y_pred == y_test))
 				df = pd.concat((df,pd.DataFrame([[Q,np.mean(y_pred == y_test)]],columns=['Questions','Performance'])))
 
-
-			# fold_performance[fold] = fold_performance[fold] + performance
 
 		return df
 
