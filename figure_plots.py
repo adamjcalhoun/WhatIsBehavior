@@ -735,6 +735,9 @@ def print_metadata_table(behavior_survey,savefilename=None):
 def print_tex_table(behavior_survey,savefilename=None):
 	behavior_survey.latex_questions_table(behavior_survey.get_original_df())
 
+def print_def_table(behavior_survey,savefilename=None):
+	behavior_survey.latex_def_questions_table(behavior_survey.get_original_df())
+
 def make_all_plots(show_plot=True):
 	behavior_survey = Survey(survey_file)
 	
@@ -762,6 +765,7 @@ def make_all_plots(show_plot=True):
 
 	# tables with response metadata
 	print_metadata_table(behavior_survey)
+	print_def_table(behavior_survey)
 
 	supp_fig3(behavior_survey,show_plot=show_plot,savefilename='figs/supp_fig3.pdf')
 	supp_fig4(behavior_survey,show_plot=show_plot,savefilename='figs/supp_fig4.pdf')

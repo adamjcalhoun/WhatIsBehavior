@@ -122,6 +122,32 @@ class Survey:
 
 			f.write(ender)
 
+	def latex_def_questions_table(self,df,tex_name='figs/archetype_table.tex'):
+		# write out the questions for each definition
+		behave_defs = ['Reflex','Actions','Understanding the mind','Motor or sensorimotor','Non-animal','Cognition']
+		header = '\\begin{enumerate}\n'
+		subheader = '\\begin{itemize}[label={}]\n'
+  
+		subender = '\\end{itemize}\n'
+		ender = '\\end{enumerate}\n'
+
+		questions = self.get_question_array()
+
+		with open(tex_name,'w') as f:
+			f.write(header)
+
+			for binds,bdef in enumerate(behave_defs):
+				f.write(' \\item ' + bdef + '\n')
+				f.write(subheader)
+
+
+				for qq,question in enumerate(self.get_answers_from_cluster(binds,char_per_line=800000)):
+					f.write('Q' + str(qq+1) + ': ' + question + '\n')
+
+				f.write(subender)
+
+			f.write(ender)
+
 	def latex_metadata_table(self,tex_name='figs/metadata.tex'):
 		# https://www.overleaf.com/learn/latex/tables
 		# write out the questions to a tex-readable table
