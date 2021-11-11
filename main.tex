@@ -1,0 +1,291 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{enumitem}
+\usepackage{longtable}
+
+
+% % line numbers
+\usepackage[left]{lineno}
+
+% \usepackage[
+% backend=biber,
+% style=numeric,
+% sorting=none
+% ]{biblatex}
+% \addbibresource{behavior.bib}
+
+% \makeatletter
+% \renewcommand{\@biblabel}[1]{\quad#1.}
+% \makeatother
+
+\usepackage{nameref,hyperref}
+
+\linenumbers
+
+\begin{document}
+\noindent {\LARGE \textbf{What is behavior? No, seriously, what is it?}}
+
+\vspace{6pt}\noindent {\large Adam J. Calhoun$^{1,*}$, Ahmed El Hady $^{1,*}$}
+
+\vspace{6pt}
+
+\noindent{\small $1$. Princeton Neuroscience Institute, Princeton University, Princeton, United States. 
+
+
+\noindent * correspondence should be addressed to Ahmed El Hady(ahady@princeton.edu) or Adam Calhoun (adam.calhoun@gmail.com)}
+
+
+\vspace{18pt}
+
+\section*{Abstract}
+
+Studying `behavior' lies at the heart of many disciplines. Nevertheless, academics rarely provide an explicit definition of what `behavior' actually is. What range of definitions do people use, and how does that vary across disciplines? To answer these questions we have developed a survey to probe what constitutes `behavior'. We find that academics adopt different definitions of behavior according to their academic discipline, animal model that they work with, and level of academic seniority. Using hierarchical clustering, we identify at least six distinct types of `behavior' which are used in seven distinct operational archetypes of `behavior'. Individual respondents have clear consistent definitions of behavior, but these definitions are not consistent across the population. Our study is a call for academics to clarify what they mean by `behavior' wherever they study it, with the hope that this will foster interdisciplinary studies that will improve our understanding of behavioral phenomena.
+
+\vspace{18pt}
+\section*{Introduction}
+
+The scientific definition of `behavior' has tended toward the maxim `I know it when I see it'. But does everyone know and see the same thing? Much ink has been spilled coming up with precise definitions of behavior, stretching from Aristotle \cite{aristotle}, through Wiener's cybernetics \cite{wiener2019cybernetics}, Von Neumann \cite{von2012computer}, Lorenzian ethology \cite{lorenz2013foundations}, Tinbergen behavioral theory \cite{tinbergen1972animal} and Von Uexkuell's umwelt \cite{uexkull1921umwelt}. More recent work has operationalized such definitions to create machine learning algorithms capable of `recognizing' when an animal is performing some `behavior' \cite{berman2014mapping,wiltschko2015mapping,calhoun2019unsupervised}. An alternative to creating one's own definition has been to ask how experts in a field actually use the word. Within behavioral biology, Levitis et al \cite{levitis2009behavioural} surveyed the literature and found 25 distinct operational definitions of behavior. These range from the vague (`what an animal does', \cite{davis1966integral}) to the specific (`A response to external and internal stimuli, following integration of sensory, neural, endocrine, and effector components). Surveys on biological concepts such as `genes' and `consciousness' \cite{consciousness-2021,stotz2004biologists} have similarly identified highly divergent meanings of words that form the basis of their respective fields. However, `behavior' is a concept not only used by behavioral biologists but across many fields. To date there are no surveys that cover a wide variety of academic fields when it comes to the definition of behavior.
+
+Implicit and unstated definitions of behavior have resulted in scientific results that are overturned or narrowed when the definition is made explicit. A common assumption is that an animal is what `behaves' even though behaviors that are considered very `fundamental', such as climbing a chemical gradient to a more attractive location (chemotaxis) may only be achieved through many animals interacting together \cite{ramdya2014group}. Similarly, fertility was classically viewed as a sperm acting upon an egg, when in fact the egg actively participates in the behavior [cite]. In the brain, the `direct' and `indirect' pathways of the striatum have classically been thought of as biasing behavior, defined as enhancing the production of particular motor actions. Instead, they may be biasing the animal toward particular cognitive strategies \cite{bolkan2021strong}. In all of these cases, a particular definition of behavior was assumed which precluded the study of the underlying phenomena that more cleanly explained (whatever). [This is why we need clear definitions of behavior.]
+
+There are good reasons to believe that different fields use different definitions and that these definitions in turn influence what is studied. For instance, consider the study of a risky choice. The behavior that an economist might be interested in are the biases and heuristics that people employ while performing real world decisions, while a neuroscientist seeks to understand how the `behavior' is mediated via neural mechanisms. On the other hand, behavioral ecologists seek to study how `behavior' is shaped by the environment, while sociologists seek to understand society through the `behavior' of its individuals. While each of these researchers seeks to understand `behavior', they are attempting to understand fundamentally different things by virtue of these disciplinary differences in mechanism,.
+
+This can reflect deeper, more fundamental disagreement about what `behavior' is. For instance, sensorimotor behavior is behavior that relates sensory input to motor output. But is this `behavior' when it is performed by a rat? How about a C. elegans, with only three or four synapses between sensory neurons and motor output? What about a bacteria or a computer program? Are the neurons themselves `behaving'? Furthermore, not only is the animal moving but there are cognitive variables and needs that influence the animal's action. Which of these constitute the `behavior'?
+
+Instead of creating our own definition of behavior, we aimed to identify how the word `behavior' is actually used by the academic community. We designed a survey aimed at determining the answer to this question. Through a quantitative analysis of survey data, we show that what constitutes `behavior' differs between academic disciplines, level of academic seniority, and type of animal model organism studied. We further show that there are at least six `types' of behavior that are used to construct seven archetypes of behaviors. 
+
+The study pinpoints the lack of a common inter-disciplinary definition of behavior. We argue that we do not need an agreed-upon singular definition of behavior, but we do have to be clear on what the definitions that we are using are in any given study. Those clear working definitions will open up the opportunity for effective interdisciplinary studies that tackle multiple facets of `behavior'. We offer clear ways that explicitly identifying these archetypes can improve our ability to understand behavior.
+
+\vspace{24pt}
+\section*{Results}
+
+\subsection*{Widespread disagreement of definitions of behavior}
+We developed a set of questions designed to probe how people define `behavior'. For instance, 'A behavior is always the output of motor activity', 'Is learning a behavior?', and 'Is a dog that follows a scent trail behaving?'. We included questions that were designed to elicit inconsistencies such as, 'Is a reflex a behavior?' and 'Is sweating a behavior?'. The order of questions was randomized and the survey was distributed online and elicited responses from a range of academic disciplines and seniorities (see Methods, Table 1 and 2). Analysis revealed that respondents did not provide a consistent answer for the the majority of questions: 43 / 48 answers had fewer than 80\% of respondents answering in the same manner (Table 1, Supplemental Fig 1a). While there were some questions that showed widespread agreement in either a `Yes' ('Is a dog that follows a scent trail behaving') or a `No' ('Does a behavior need to be intentional') answer (Supplemental Fig 1b-d), most questions showed disagreement. The questions with the most disagreement (defined as the highest uncertainty, or entropy, in their responses), included 'Can computer programs behave?' and 'A behavior always involves interaction with the environment?' (Fig 1a). We remain agnostic as to the source of disagreement between responses: it is possible that different subjects are responding to different aspects of each question. This does not impact the interpretation of our results as we believe this itself provides a consistent signal about underlying beliefs (see Discussion).
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{fig1.pdf}}
+\caption{\textbf{Definitions of behavior are varied but internally consistent}} \textbf{a}, The five questions with the most disagreement between respondents as defined by the response entropy (n=455). \textbf{b}, Responses are predictable with a regression model. Gray dots represent the performance at predicting answers on held-out data using 5-fold cross-validation, black diamond is mean. Mean prediction accuracy across responses is 63\%. The dashed line represents chance performance. \textbf{c-f}, We used a factor analysis (Multiple Correspondence Analysis (MCA)) to reveal how groups responded on similar questions. Plotting responses on the two largest factors, colored by (\textbf{c}) scientific field, (\textbf{d}) neuroscience specialty, (\textbf{e}) model organism used, and (\textbf{f}) academic seniority. All data shown is the mean, and error bars are SEM.
+\end{figure}
+
+A previous survey of professionals in animal behavior\cite{levitis2009behavioural} had observed that respondents were inconsistent and self-contradictory. Was this true for our survey? We used a regression model to ask whether we could predict responses from the answers to previous questions and found that we could (Fig 1b). This was true both on average and across all questions . This suggests that disagreement on behavioral questions represents disagreement on the underlying definition of behavior itself.
+
+We then asked whether this variation in responses could be due to differences in academic disciplines - perhaps those trained in the Humanities would have a fundamentally different idea of 'behavior' from those trained in Engineering, for instance. We embedded responses in a lower-dimensional space using multiple correspondence analysis (MCA), a factor analysis technique for categorical variables \cite{le2010multiple} (Supp Fig 2). For visualization purposes, we grouped subjects into broad academic categories: Biological Sciences, Math/Engineering, Ecology, and Humanities (see Methods for definitions, but see Supplemental Fig 3 for all disciplines). We found differences between each field (Fig 1c, Supp Fig 3a, 4a). We  hypothesized that even within a field there might be substantial differences; a Cognitive Neuroscientist gets different training from a Systems Neuroscientist. Again, plotting the mean responses for each sub-field showed significant differences (Fig 1d, Supp Fig 4b).
+
+In behavioral research, scientists can ask fundamentally different questions about behavior when they work with humans than when they work with invertebrates. For instance, C. elegans researchers typically investigate chemotaxis and thermotaxis, which are activities that involve sensorimotor transformations, while researchers who study humans may be more likely to study cognitive activities like abstract decision-making. Additionally, those who study invertebrates can map behavior to a single-neuron level, something not typically done in humans.  We thus divided subjects by the model organism that they work with. We again find differences between model organisms (Fig 1e, Supp Fig 3b,4c). Surprisingly, we also found that academic experience is also associated with differences in behavioral definitions (Fig 1f, Supp Fig 4d).
+
+
+
+\subsection*{Hierarchical clustering finds definitions}
+
+One possibility is that these differences between fields are not because each has a different single definition of behavior, but because certain behavioral definitions are more common in that field. In order to identify potential definitions of behavior, we performed hierarchical clustering on both the responses and respondents (Fig 2). We found six potential classes of questions and seven potential classes of responses. 
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{fig2.pdf}}
+\caption{\textbf{Survey responses reveal clustered definitions of behavior.}} Hierarchical clustering on the 455 responses reveals six clusters in the questions and seven clusters in the responses. The six categories of questions, labeled 1-6, are unique definitions of behavior, and the seven categories of responses, labeled A-G, are behavioral archetypes. See Figures 3 - 4.
+\end{figure}
+
+We began by identifying whether the different clusters were meaningful. Examining the questions in the response clusters revealed that similar questions were in each cluster (Fig 3). For instance, Cluster 1 was filled with questions about whether reflexes count as behaviors ('Is a baby urinating a behavior?', 'Is a reflex a behavior?', 'Is the sucking reflex a behavior?', and so on). Based on this, we term these 'behavior definition clusters' and labeled them as:
+
+\begin{enumerate}
+ \item Reflex (Fig 3a)
+ \item Actions (Fig 3b)
+ \item Understanding the mind  (Fig 3c)
+ \item Motor or sensorimotor  (Fig 3d)
+ \item Non-animal  (Fig 3e)
+ \item Cognition  (Fig 3f)
+\end{enumerate}
+
+\subsection*{Behavioral archetypes}
+
+We next examined what each response cluster corresponds to. For each respondent cluster - which we call a 'behavioral archetype', answers were relatively consistent in each behavioral definition but answers varied widely between clusters (Fig 4a, Supplemental Fig 5). For instance, in the `reflex' behavioral definition the mean across all responses was 67\% `Yes'. However, the `A' archetype had 94\% of all responses as `Yes' while the `D' and `G' clusters had 19\% and 25\% of responses as Yes, respectively. To better understand how each archetype corresponds to the respondent's answers, we plotted the change in responses relative to the overall mean for `Yes', `No', and `Maybe' responses (Fig 4b, Supp Fig 6).
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{fig3.pdf}}
+\caption{\textbf{Behavioral definitions revealed by clustering.}} \textbf{a-f}, Example questions for each type of behavior (left). Illustration representing that type of behavior (right). These definitions are (a) Reflex, (b) actions are behavior, (c) we must understand the mind of an animal to identify its behavior, (d) motor or sensorimotor, (e) non-animal behaviors, (f) learning and memory/cognition.
+\end{figure}
+
+Based on these, we named these archetypes by examining which behavioral definitions were being used:
+
+  \begin{enumerate}[label=\Alph*]
+    \item Broad
+    
+    \item Motor outputs (animals only)
+
+    \item Broad (but mostly motor)
+
+    \item Cognition (and anthropomorphizable animal behaviors)
+    
+    \item Broad (animals only)
+    
+    \item Well-defined/understood animal behaviors
+
+    \item Animals acting with intentions
+\end{enumerate}
+
+Within each archetype, there were unique patterns of beliefs for each definition. For instance, whereas `Broad' (A) archetypes accept any reflex as constituting a behavior, `Cognition' (D) and `Animal intentions' (G) rejected almost all reflexes as constituting `behavior'.  `Cognition' was more uncertain, being much more likely to respond with `Maybe' to whether a baby urinating constitutes behavior (Q4) or whether a reflex counts as behavior at all (Q9), even while both flatly reject the knee-jerk reflex as a behavior (Q25). These responses do not exist in a vacuum but must be interpreted in relation to each other; in this example, for instance, it is possible that respondents are uncertain whether a baby urinating may have cognitive motives that go beyond simple reflex.
+
+Prior to conducting this study, we had expected two prominent archetypes to appear in responses: behaviorism, in which behavior can be explained through conditioned motor patterns without regard to cognitive states \cite{skinner1986behaviorism, skinner2011behaviorism}, and cognitivism, in which cognitive processes are thought to be driving behavior and are central to it \cite{haugeland1978nature}. More specifically, behaviorism \cite{skinner1986behaviorism, skinner2011behaviorism} considers behavior as either a reflex to a certain stimulus \cite{dewey1896reflex} or one that is shaped by past reinforcement or punishment contingencies.
+
+However, it is unclear if colloquial definitions of behavior actually relate to these definitions. In order to answer these questions, we assigned each of our survey questions to supporting behaviorism, supporting cognitivism, or being unrelated to either (see Methods). Individual responses were assigned a score from -1 to 1 relating to the number of ``Yes"es or ``No"s that were answered for the relevant questions (Fig 7). We find that very few respondents are strongly Behaviorist or Cognitivist, on either an individual level (Fig 7, histograms) or a group level. We thus conclude that if we were to define `behavior' in a purely Behaviorist or Cognitivist fashion we would not be using the term as it is actually used, and would not be studying what is actually being studied.
+
+% figure 6 - behaviorist/cognitivist
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{fig6.pdf}}
+\caption{\textbf{No one cares about behaviorism and cognitivism.}} Questions were labeled `behaviorist', `cognitivist', or `neither'. Responses were scored to either totally agree (+1) or totally disagree (-1) with each category. Respondents did not agree with behaviorism or cognitivism, but used definitions that were a mix of the two. Circles represent mean and error bars are +/- SEM.
+\end{figure}
+
+Taking this all together, we show how behavioral archetypes are made up of different behavioral definitions (Fig 5).
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{fig4.pdf}}
+\caption{\textbf{Validation and consistency of behavioral archetypes.}} \textbf{a} Responses are consistent (regression). \textbf{b}, The mean `Yes' response in each category allow us to understand what the definitions are composed of.
+\end{figure}
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{fig4a.pdf}}
+\caption{\textbf{Validation and consistency of behavioral archetypes.}} \textbf{a}, Behavioral archetypes are built out of the responses to different definitions. To illustrate the archetypes, we use the relative responses (Fig 4, Supp Fig 5-6). For each archetype, we color the definitions by whether they are required (pale pink), excluded (brown), included (purple), or sometimes included (grey).
+\end{figure}
+% Change in 'Yes' response relative to all data show key differences to each question category. Values plotted are the 2-fold change in response relative to overall mean, coded so that blue is $<$ -0.33, red is $>$ 0.33 and grey is in between. \textbf{d-e}, Same as \textbf{b}, but for Maybe and No responses, respectively.
+
+\subsection*{Academic fields use different definitions}
+We next used these behavioral archetypes to ask whether different academic fields are consistently using different archetypes when they refer to `behavior'. Respondents who come from the humanities were dramatically less likely to be part of the `broad' (A) archetype and much more likely to be a part of the `acting with intentions' (G) archetype. Ecologists were relatively more likely to be part of the `broad (mostly motor)' (C) and `broad (animals only)' (E) archetypes (Fig 6a). Within neuroscience specialties, molecular neuroscientists were more likely to be a part of the `broad (mostly motor)' (C) archetype and cognitive to be part of the `well-defined/understood behaviors' (F) archetype. The `broad (animals only)' (E) archetype was almost entirely Systems and Computational neuroscientists (Fig 6b).
+
+When broken down by the organism used for the work, those who worked with Humans were the least likely to use `broad' (A) and `broad (animals only)' (E) archetypes but the most likely to use the `cognition' (D) and `well-defined/understood behaviors' (F) definitions. `Other vertebrates' dominated `broad' (A) and `broad (animals only)' (E) and invertebrates were 50\% more likely to be a part of `broad (but mostly motor' (C) (Fig 6c).
+
+Undergraduates were predominantly a part of archetypes `broad' (A) and `acting with intentions' (G), whereas professors were the most likely to be part of cluster `motor outputs (animals only)' (B) (Fig 6d).
+
+% this is figure 5
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{fig5.pdf}}
+\caption{\textbf{Different groups have distinct distribution of definitions.}} \textbf{a}, Academic fields show different propensities to use each category of 'behavior'. This is also true of \textbf{b} neuroscience specialties, \textbf{c} model organism used, \textbf{d} and academic seniority. See Methods for definitions of each field.
+\end{figure}
+
+\section*{Discussion}
+
+In this study, we have shown that `behavior' is not universally defined by academics. We have developed and analyzed a survey that has allowed us to identify how the term `behavior' is used, and what it means to people belonging to different academic communities. Using this survey, we have shown that important differences exist in what an academic community would consider to be `behavior', and additionally identified six behavior clusters and seven archetype clusters. These behavioral archetypes correspond roughly to the following labels `broad', `animal motor outputs are behavior', `broad but motor', `animal+cognitive', `animal motor+cognitive', `intentional motor behaviors', and `intentional motor outputs by animals'. We speculate that other sub-categories exist - we could, for instance, have cut the tree at other branches or used even more questions and gotten more responses. 
+
+Our study is the first report the heterogeneous definitions of `behaviors' across academic communities, as previous studies have focused on a particular sub-field. For example Levitis et al \cite{levitis2009behavioural} looked at how behavioral biologists define `behavior' and found them to be self-contradictory. However, we have shown that we are able to predict the subjects' definition of behavior on an individual basis and the definitions are to a great extent self-consistent relative to some underlying set of beliefs. We believe that a follow-up survey focusing on particular terms in behavior, such as `decision-making', `foraging', or `computation' could lead to similar classification of terms that are widely used in literature. It is important to note also that we have taken our utmost care in formulating the questions using precise language but this does not prevent that some of the words might be  read in a more complex manner than what we intended to. This is specially true with words that have ambiguous boundaries such as "computer behave" . It might be understood as "it is useful sometimes to consider a computer's output as a behavior". We are agnostic to how people interpret these questions and primarily interpret the answers as reflecting some common underlying set of beliefs.
+
+%There is an increased interest to study behavior and it is crucial to identify the way researchers define it. In many instances, researchers will circumvent this question by claiming that by collecting more behavioural data using advanced hardware and software (big data) we will be able to define what a behavior is \cite{calhoun2017quantifying, datta2019computational}. We find this view problematic because first even if you collect an extremely large behavioral data sets, you have to a priori define what a behavior is , second we risk falling into the fallacy that observation is equated to understanding ( in what one can call :" the neobehaviourist turn" ), third the decisions to collect data on a particular level of description are often arbitrary ( a level of description is often chosen a priori). Therefore, it becomes clear that there are always implicitly definitions of behaviors that are used in any behavioural studies. Moving forward, it is very crucial to unpack those definitions and assess the way in which they affect, guide and define the scope of experimental paradigms.
+
+% The increased interest in using machine learning algorithms to quantify behavior makes it vital to unpack the definitions of behavior that are used \cite{calhoun2017quantifying, datta2019computational}. As is evidenced by this survey, `behavior' has multiple meanings, whereas the definitions used in these studies are an implicit product of the data that we are able to collect. For instance, video data over short timescales is relatively cheap and easy to collect, as opposed to continuous long term field observations. It is easy to then fall back on usages of behavior that reflect these convenient sources of data rather than the natural behavior of the animal unfolding over multiple spatio-temporal scales. For example if being hungry is a behavior, data sets entirely composed of visible motor outputs may be unable to accurately identify the behavior of hunger. Thus, studies that claim to explain `behavior' should be clear on the limitation as to \textit{which} type of behavior is being explained and the underlying definition of behavior being used. It also begs the question of how the gathered data constrain the definitions of behavior. 
+
+%the previous paragraph need to be discussed as it is unclear to me the relationship of supervised / unsupervised algorithms here vis a vis the definitions of "behavior". 
+
+Despite all this, these inconsistent and unclear definitions may obscure otherwise clear differences. For instance, one of the most controversial questions in our survey was Q31: `You are wearing a virtual reality headset. You see a virtual tree and reach out to touch it. Is this the same behavior as reaching out to a real tree?', with roughly equal numbers of Yes, No, and Maybe answers. This has direct relevance to many experiments in neuroscience, where behaviors are 'simplified' for experimental tractability: a rodent may be fixed in place and make a `decision' by licking from one of two reward ports. Would this `behavior' be the same in a different context in which the animal was free to explore and move about? it is increasingly apparent that movement itself influences many aspects of the decision process, and animals solve decisions differently when they are head fixed and when they are freely moving \cite{eisenreich2019macaques} - which would not be obviously apparent if we consider them the `same behavior'.
+
+%Several sub-schools of constructivism here delineate the relationship between cognition and the environment: enactivism refers to the school of thought that cognition arise from dynamic interaction between brain, body and the environment , embodied cognition refers to the school that cognition is shaped by many aspects of the body in addition to the brain and ecological psychology refers to the school considering how the environment of an organism affords various actions to the organism, by studying the physical environment of the organism one can understand  the perception / behavior of the animal. The difference between them is in the degree of interaction between internal (cognitive states) and external (environment) through sensory organs. A central concept for the constructivist school generally is the concept of the "Umwelt" meaning how the world of the animal is experienced from its perspective.  Uexküll (model) advanced a model of how perception and action link the organism’s nervous system with its environment in a functional cycle: “everything a subject perceives belongs to its perception world [Merkwelt], and everything it produces, to its effect world [Wirkwelt]. These two worlds, of perception and production of effects, form one closed unit, the environment [Umwelt]” .
+
+
+%Two terms to use - methodological bias and behavioral reductionism (at which level do we need to observe/study to understand behavior); (the partitions of the behavior, neurocentric - that the brain is necessary and sufficient for behavior -  ).
+%Talk about behavior just reporting 'pokes' thinking that we can somehow isolate some area of the brain and separate it from the rest.
+%There's one crucial question: how do academics actually use it? [Point again to Krishna Shenoy task as 'behavior' but really just motor output.]
+
+
+Academics often resort to behavioral reductionism by choosing a simplified version of a behavior and then claim that this reflects the entirety of the behavior under study. However, this can be highly misleading for anyone outside of that academic's field, who may not understand the implicit definition of the `behavior', with all of its caveats and consequences. For example, a series of nose pokes in an operant chamber may constitute behavior in a systems neuroscience experiment. On the other hand, an anthropologist or a lay person would focus on other aspects, for example the grooming of the animal, the tail movement, and so on. Even within one own's work, there is the danger of reifying the simplified version of a behavior as `the behavior' the animal is producing, rather than the connected set of other aspects of its behavior which may be vital to the question at hand. While we acknowledge the limitations of studying multiple levels of behavioral descriptions simultaneously, we also stress that we should be cognizant of those limitations, indicating which level we are studying and use more precise language when describing it. This also reflects on the scientific literature that academics publish and if the exact level of description / shortcomings are clarified, inter-disciplinary interactions would be far easier and more fruitful. 
+
+We believe this survey makes clear that `behavior' constitutes a wide class of concepts (or, different definitions). One clear suggestion that can be taken from this is the need for integrating different types of `behavior' to make further advances on its study. There are many insightful reviews that have provided a critical analysis of how behavior is studied \cite{gomez2019life, krakauer2017neuroscience}. To supplement those critiques, here we focus on quantitative analysis of how a sample of academics define behaviors thus providing evidence for the variety of the epistemological frameworks at play in different academic fields. A challenge here is that the hegemony of particular techniques in an academic field can lead to methodological bias which itself delineates the meaning of `behavior'. For example in systems neuroscience researchers will systematically use brain recording techniques to look for `correlates' of `behavior', leading to a neurocentric view of behavioral phenomenology. Others will use pure video tracking combined with machine learning algorithms to classify states of behavior regarded in this sense as a behavioralist mechanism. Although we also recognize the difficulty of combining different methods, technological advances are making the possibility of combining multiple techniques more streamlined \cite{markowitz2018striatum}. It is possible to go further and take an integrative approach which considers how the ecological environment is shaping the behavior along side the brain, the body, and the animal physiological state. 
+
+\subsection*{Acknowledgments}
+We would like to thank Emily Dennis, Emily Mackevicius, Asif Ghazanfar, Yael Niv, David Barack, Jakob Voigts, Patrick Dylan Rich, Selmaan Chettih, Jess Breda, Sandeep Robert Datta, Benjamin Hayden, and Alex Gomez-Marin for insightful feedback. We would also like to thank Kathleen Quach for the illustrations used in the manuscript. This work was funded by the Simons Foundation SCGB (AWD494712, AJC).
+
+\subsection*{Author contributions}
+A.J.C and A.E. have both designed the survey, analyzed the data and wrote the manuscript
+
+\subsection*{Competing interests}
+Authors have no competing interests.
+
+\subsection*{Code and data availability}
+Code and data are available at \href{https://github.com/adamjcalhoun/WhatIsBehavior}{https://github.com/adamjcalhoun/WhatIsBehavior}. A version of the survey can be taken at \href{http://adamcalhoun.com/WhatIsBehavior/}{http://adamcalhoun.com/WhatIsBehavior/}.
+
+\section*{Methods}
+\subsection*{Design}
+In order to assess whether there is a consistent definition of behavior used across academia, we constructed an online survey using Qualtrics. Questions were developed by the authors who identified potential questions from a wide sample of putative `behaviors', with several drawn from a previous survey performed by other authors \cite{levitis2009behavioural}. They then sent those questions to colleagues who were experts in animal behavior and ensured that none of the questions were consistently answered `Yes', `No' or `Maybe' in order to identify whether they represented differences of opinion in the field. The survey was then disseminated via Twitter, online mailing lists, as well as to colleagues. Subjects were allowed to answer 'Yes', 'Maybe', or 'No' to all questions. Subjects were asked for metadata consisting of their gender, University or Institute affiliation, country and state of residence, level of seniority, research area, and model system used. Survey questions were randomized and placed in blocks of five questions. Subjects had to answer all the questions before proceeding to the next set of questions. Subjects were free to decline participation in the survey. Subjects were offered the option of leaving their email address to enter a raffle to win a \$50 Amazon gift card. The research was approved by the Princeton IRB (IRB\# 12895).
+
+\subsection*{Data analysis}
+Due to a coding error when designing the survey, subjects did not have to answer the first question in order to continue ('An animal is thirsty. It must choose between two levers, one of which will provide water. Would you refer to the animal pressing the lever as the primary behavior it is producing?'). For consistency, this question was excluded from all analyses. Only data where the questionnaire was finished were used for analysis. Due to the methods used for analysis, we only used responses that finished the entire survey.
+
+\subsection*{Factor analysis}
+In order to explore whether answers were similar across fields, data dimensionality was reduced using the python library Prince (available at \href{https://github.com/MaxHalford/prince}). Due to the categorical nature of the data, we used Multiple Correspondence Analysis (MCA). Data was transformed into one-hot encodings and then dimensionality was reduced using MCA. Plotting the components (Supp. Fig 2a) showed that the first four components each explain at least 5\% of the variance, while subsequent components each explained less than 5\% of the variance. Because of this, all analyses were done on the first four components. All data was plotted using the mean and standard deviation across metadata groups.
+
+\subsection*{Sub-disciplines}
+Subjects were allowed to enter their `sub-field' in a text box. We categorized these sub-disciplines into four broad disciplines: `systems + circuits', `cognitive', `computational', and `molecular'. Subjects were categorized as belonging to `systems + circuits' if they entered `systems', `circuit', or `circuits' in the sub-field box. They were categorized as `cognitive' if they entered `cognitive' or `cognition'. They were categorized as `computational' if they entered `computational', `theoretical', or `theory'. They were categorized as `molecular' if they entered `molecular' or 'cellular'. They were categorized as `mammals' if they entered `rodents' or `other mammals', as 'other vertebrate' if they entered `fish', `birds', or `other non-mammalian vertebrates', and as `invertebrate' if they entered `drosophila', `c. elegans', or `other invertebrates'. `Biological sciences' were `neuroscience', `psychology', `biology', and `medicine', `Math/engineering' included `engineering', `statistics', `mathematics', and `machine learning'. `Ecology' included `ethology' and `ecology'. Humanities included `philosophy', `history', `sociology', and `languages and literature'.
+
+\subsection*{Hierarchical clustering}
+Hierarchical clustering was performed using Seaborn and SciPy \cite{2020SciPy-NMeth,waskom2020seaborn} using the Ward linkage and Euclidean distance (Fig 2).
+
+\subsection*{Regression analysis of answers}
+Regression was performed using multinomial logistic regression in scikit-learn \cite{scikit-learn}, with an elastic net penalty and an l1 ratio of 0.5. Answers to questions were fit using 5-fold cross-validation. Questions from the second half of the survey were predicted using one-hot encoding of the answers to questions from the first half, and questions from the first half were predicted from one-hot encoding of the answers to the first half.
+
+\subsection*{Behaviorism and Cognitivism}
+After the survey was completed, one author identified questions that a  behaviorist or a cognitivist would agree with. For example, Q23 (``A behavior is always potentially measurable") was chosen to be representative of behaviorism and Q22 (``Does a behavior need to be intentional (does every behavior an animal produces have a purpose)?") was chosen to be representative of cognitivism.
+
+For each respondent, a belief index was calculated as $\frac{-1 * (``No"\;answers)\; +\; 1*(``Yes"\;answers)}{number\;of\;questions}$.
+
+The following questions were chosen as being behaviorist: Q1, Q4, Q9, Q14, Q15, Q17, Q21, Q23, Q25, Q26, Q27, Q29, Q30, Q33, Q34, Q38, Q40, Q42, Q44, Q46.
+
+The following questions were chosen as being cognitivist: Q0, Q6, Q7, Q8, Q10, Q12, Q13, Q22, Q31, Q28.
+
+This is also available as a CSV file in Supplementary Files and at the GitHub repository.
+
+\section*{Supplemental}
+
+\input{question_table}
+\newpage
+
+\input{metadata}
+
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{supp_fig1.pdf}}
+\caption{\textbf{General properties of the responses.} \textbf{a}, For each question, the most common answer (eg, 'Yes') was identified and the probability of that response was plotted. Few questions should >80\% consensus.  \textbf{b}, The responses most consistently answered 'Yes'. \textbf{c}, The responses most consistently answered 'No'. \textbf{d}, The responses most consistently answered 'Maybe'.).}
+\end{figure}
+\newpage
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{supp_fig2.pdf}}
+\caption{\textbf{Dimensionality reduction.} \textbf{a}, The variance explained for each factor of the MCA space. \textbf{b}, For the two largest dimensions, the questions that showed the three largest positive and three largest negative loadings for the first (blue) and second (red) factors. Because MCA uses one-hot data, loadings are question-answer pairs.}
+\end{figure}
+\newpage
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{supp_fig3.pdf}}
+\caption{\textbf{Dimensionality reduction in uncombined categories.} The same data as in Figure 1b,d.}
+\end{figure}
+\newpage
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{supp_fig4.pdf}}
+\caption{\textbf{Metadata in higher factors.} The same data as in Figure 1b-e, but plotted in the next two largest dimensions.}
+\end{figure}
+\newpage
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{supp_fig5.pdf}}
+\caption{\textbf{Raw response probabilities.} The mean \textbf{a}, Maybe responses and \textbf{b}, No responses for each behavioral definition and archetype pair. See Figure 3.}
+\end{figure}
+\newpage
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{supp_fig6.pdf}}
+\caption{\textbf{Definition clusters in uncompressed categories.} The same data as in Figure 4, replotted by each academic discipline and animal model.}
+\end{figure}
+\newpage
+
+\begin{figure}
+\centerline{\includegraphics[width=\textwidth]{supp_fig7.pdf}}
+\caption{\textbf{Definition clusters in uncompressed categories.} The same data as in Figure 4, replotted by each academic discipline and animal model.}
+\end{figure}
+\newpage
+
+{\footnotesize \bibliography{behavior.bib}}
+% \bibliographystyle{apalike}
+\bibliographystyle{plain}
+% \printbibliography
+
+\end{document}
