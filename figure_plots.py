@@ -773,11 +773,18 @@ def make_all_plots(show_plot=True):
 	supp_fig6(behavior_survey,show_plot=show_plot,savefilename='figs/supp_fig6.pdf')
 	supp_fig7(behavior_survey,show_plot=show_plot,savefilename='figs/supp_fig7.pdf')
 
+def make_one_plot(show_plot=True):
+	# just a function for when I only want to re-generate one thing at a time
+	behavior_survey = Survey(survey_file)
+	behavior_survey.cluster_defs()
+	print_def_table(behavior_survey)
 
 if __name__ == '__main__':
 	behavior_survey = Survey(survey_file)
 
-	make_all_plots(show_plot=False)
+	# make_all_plots(show_plot=False)
+
+	make_one_plot(show_plot=False)
 
 	# print_cluster_questions(behavior_survey)
 

@@ -33,7 +33,7 @@ class Survey:
 
 	def filter_questionnaire(self):
 		column_names = ['Q' + str(i+2) for i in range(48)]
-		self.__finished_df = self.__original_df[self.__original_df['Finished'] == 'True']
+		self.__finished_df = self.__original_df[self.__original_df['Finished'] == 'TRUE']
 
 	def ynm_to_dig(self,df):
 		# convert a dataframe with Y/M/N to +1/0/-1
@@ -131,7 +131,7 @@ class Survey:
 		subender = '\\end{itemize}\n'
 		ender = '\\end{enumerate}\n'
 
-		questions = self.get_question_array()
+		all_questions = self.get_question_array()
 
 		with open(tex_name,'w') as f:
 			f.write(header)
@@ -141,8 +141,9 @@ class Survey:
 				f.write(subheader)
 
 
-				for qq,question in enumerate(self.get_answers_from_cluster(binds,char_per_line=800000)):
-					f.write('Q' + str(qq+1) + ': ' + question + '\n')
+				for qq,question in enumerate(self.get_answers_from_cluster(binds+1,char_per_line=800000)):
+					question_ind = all_questions.index(question[0].strip())
+					f.write('\\item Q' + str(question_ind+1) + ': ' + question[0].strip() + '\n')
 
 				f.write(subender)
 
